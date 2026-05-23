@@ -1,8 +1,4 @@
 not_use/
 blank_dataset/
 .env
-eda_dataset copy.ipynb
-finetune_opus_mt_philosophy copy.ipynb
-
-# Training artifacts are too large for regular GitHub pushes.
-model_final/
+runs/
