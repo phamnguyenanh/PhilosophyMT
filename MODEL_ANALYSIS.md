@@ -138,19 +138,7 @@ Hạn chế:
 
 Trong project này, BLEU và chrF++ được dùng cùng nhau. BLEU cho tín hiệu n-gram ở mức từ/cụm từ, chrF++ bổ sung tín hiệu mềm hơn ở mức ký tự.
 
-## 8. Vì Sao Không Dùng COMET
-
-COMET là metric học bằng neural model, thường tương quan với human judgment tốt hơn BLEU/chrF trong nhiều benchmark dịch máy. Tuy nhiên, trong môi trường hiện tại, `unbabel-comet` gây conflict dependency:
-
-```text
-unbabel-comet -> pytorch-lightning -> torchmetrics -> transformers -> protobuf
-```
-
-Lỗi thực tế gặp phải liên quan đến `protobuf`, cụ thể import chain bị vỡ khi `transformers` cần API không có trong version `protobuf` hiện tại. Nếu cố sửa COMET bằng cách nâng/hạ `protobuf`, có nguy cơ làm hỏng môi trường training đang chạy ổn.
-
-Vì vậy notebook compare hiện tại bỏ COMET và chỉ dùng BLEU + chrF++. Nếu cần COMET nghiêm túc, nên tạo một environment riêng chỉ để scoring, tách khỏi môi trường training.
-
-## 9. Kết Quả Thực Nghiệm
+## 8. Kết Quả Thực Nghiệm
 
 Kết quả lấy từ `runs/*/eval_metrics.json`. Tất cả model được đánh giá trên cùng test split 304 samples.
 
@@ -175,7 +163,7 @@ Validation results:
 
 `marian_baseline` hiện chỉ có test metrics trong artifact.
 
-## 10. Phân Tích Kết Quả
+## 9. Phân Tích Kết Quả
 
 ### Marian fine-tuning rất hiệu quả
 
@@ -213,9 +201,3 @@ Marian LR 5e-5  -> Test BLEU 48.4134, chrF++ 65.8429
 
 Với dataset song ngữ có cặp source-target rõ ràng, MarianMT encoder-decoder có lợi thế kiến trúc cho machine translation. Qwen causal LM cần prompt/chat format và generation autoregressive, nên chi phí inference cao hơn và metric thấp hơn trong cấu hình 0.5B QLoRA hiện tại.
 
-## 11. Khuyến Nghị
-
-- Nếu ưu tiên metric dịch tốt nhất: dùng `marian_lr5e-5`.
-- Nếu muốn nghiên cứu instruction-tuned LLM và adapter fine-tuning: dùng `qwen25_0_5b_qlora`.
-- Nếu muốn baseline rõ ràng: dùng `marian_baseline` và `qwen25_0_5b_base`.
-- Nếu muốn đánh giá chất lượng dịch triết học nghiêm túc hơn: lấy mẫu dịch từ `predictions_test.jsonl` và đánh giá thủ công theo tiêu chí thuật ngữ, độ trung thành, độ tự nhiên và tính học thuật.
