@@ -47,7 +47,6 @@ Dataset chính là `dataset.jsonl`. Mỗi dòng là một JSON record:
 {
   "id": 1,
   "topic": "...",
-  "url": "...",
   "en": "English source paragraph...",
   "vi": "Vietnamese translation..."
 }
